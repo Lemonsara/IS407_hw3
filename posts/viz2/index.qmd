@@ -1,0 +1,67 @@
+---
+title: "Analysis on Rotten Tomatoes Movies"
+author: "Ning"
+date: "2024-12-11"
+categories: [movies]
+image: "image.jpg"
+---
+
+This report provides a visual exploration of the **Rotten Tomatoes Movies** dataset. The dataset contains various attributes of movies, such as runtime, audience ratings, tomatometer ratings, and MPAA ratings. These attributes offer an opportunity to analyze and understand trends in the film industry.
+
+Through a series of data visualizations, we aim to answer the following questions:
+- What is the distribution of movie runtimes?
+- How do audience ratings vary across different MPAA ratings?
+- Is there a relationship between tomatometer ratings and audience ratings?
+
+Let's dive into the visualizations and explore the story behind the data.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+
+movies <- read.csv("Rotten Tomatoes Movies.csv")
+
+movies_clean <- movies %>%
+  filter(!is.na(runtime_in_minutes) & !is.infinite(runtime_in_minutes),
+         !is.na(audience_rating) & !is.infinite(audience_rating),
+         !is.na(tomatometer_rating) & !is.infinite(tomatometer_rating),
+         !is.na(runtime_in_minutes) & runtime_in_minutes >= 0 & runtime_in_minutes <= 250)
+
+# 1. Distribution of Tomatometer Ratings
+ggplot(movies, aes(x = tomatometer_rating)) +
+  geom_histogram(binwidth = 5, fill = "blue", color = "black") +
+  labs(title = "Distribution of Tomatometer Ratings", x = "Tomatometer Rating", y = "Frequency") +
+  theme_minimal()
+
+# 2. Distribution of Runtime in Minutes with x-axis limited to 0-250
+ggplot(movies_clean, aes(x = runtime_in_minutes)) +
+  geom_histogram(binwidth = 10, fill = "green", color = "black") +
+  labs(title = "Distribution of Runtime in Minutes", x = "Runtime (minutes)", y = "Frequency") +
+  xlim(0, 250) +
+  theme_minimal()
+
+# 3. Boxplot of Audience Ratings by Movie Rating
+ggplot(movies_clean, aes(x = rating, y = audience_rating)) +
+  geom_boxplot(fill = "purple", color = "black") +
+  labs(title = "Audience Ratings by MPAA Rating", x = "MPAA Rating", y = "Audience Rating") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# 4. Count of Movies by Genre
+movies %>%
+  count(genre) %>%
+  top_n(10, wt = n) %>%
+  ggplot(aes(x = reorder(genre, n), y = n)) +
+  geom_bar(stat = "identity", fill = "orange", color = "black") +
+  labs(title = "Top 10 Genres by Movie Count", x = "Genre", y = "Count") +
+  coord_flip() +
+  theme_minimal()
+
+# 5. Scatter Plot of Tomatometer Rating vs Audience Rating
+ggplot(movies_clean, aes(x = tomatometer_rating, y = audience_rating)) +
+  geom_point(alpha = 0.5, color = "red") +
+  geom_smooth(method = "lm", color = "blue", se = FALSE) +
+  labs(title = "Tomatometer Rating vs Audience Rating", x = "Tomatometer Rating", y = "Audience Rating") +
+  theme_minimal()
+
+```
