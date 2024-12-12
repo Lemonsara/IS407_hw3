@@ -1,0 +1,17 @@
+{
+  "hash": "d66ee415335eeeecb025a4c7568800ee",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Analysis on Shoes price for various brands\"\nauthor: \"Ning Gao\"\ndate: \"2024-12-11\"\ncategories: [shoes]\nimage: \"image.jpg\"\n---\n\n\n\n\nThis is a game with executable code, hahahahaha.\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Load necessary libraries\nlibrary(ggplot2)\nlibrary(dplyr)\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\n\nAttaching package: 'dplyr'\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n```\n\n\n:::\n\n```{.r .cell-code}\n# Load the dataset\ndata <- read.csv(\"data.csv\")\n\n# 1. Distribution of Prices\nggplot(data, aes(x = price)) +\n  geom_histogram(binwidth = 500, fill = \"blue\", color = \"black\", alpha = 0.7) +\n  labs(title = \"Distribution of Original Prices\", x = \"Price\", y = \"Count\")\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-1-1.png){width=672}\n:::\n\n```{.r .cell-code}\n# 4. Breakdown of Products by Brand\ndata %>%\n  count(brand) %>%\n  ggplot(aes(x = reorder(brand, n), y = n)) +\n  geom_bar(stat = \"identity\", fill = \"orange\", color = \"black\") +\n  coord_flip() +\n  labs(title = \"Number of Products by Brand\", x = \"Brand\", y = \"Count\")\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-1-2.png){width=672}\n:::\n\n```{.r .cell-code}\n# 6. Breakdown of Products by Size\ndata %>%\n  count(size) %>%\n  ggplot(aes(x = reorder(as.factor(size), n), y = n)) +\n  geom_bar(stat = \"identity\", fill = \"pink\", color = \"black\") +\n  labs(title = \"Number of Products by Size\", x = \"Size\", y = \"Count\") +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1))\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-1-3.png){width=672}\n:::\n\n```{.r .cell-code}\n# 7. Relationship Between Price and Another Variable (Size)\nggplot(data, aes(x = as.factor(size), y = price)) +\n  geom_boxplot(fill = \"cyan\", color = \"black\") +\n  labs(title = \"Boxplot of Prices by Size\", x = \"Size\", y = \"Price\") +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1))\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-1-4.png){width=672}\n:::\n:::\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,48 @@
+---
+title: "Analysis on Shoes price for various brands"
+author: "Ning"
+date: "2024-12-11"
+categories: [shoes]
+image: "image.jpg"
+---
+
+Hello, here are some data about the shoes and I make some visualization on that. The main focus is on the relationship between prices and some other factors. 
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Load the dataset
+data <- read.csv("data.csv")
+
+# 1. Distribution of Prices
+ggplot(data, aes(x = price)) +
+  geom_histogram(binwidth = 500, fill = "blue", color = "black", alpha = 0.7) +
+  labs(title = "Distribution of Original Prices", x = "Price", y = "Count")
+
+
+# 4. Breakdown of Products by Brand
+data %>%
+  count(brand) %>%
+  ggplot(aes(x = reorder(brand, n), y = n)) +
+  geom_bar(stat = "identity", fill = "orange", color = "black") +
+  coord_flip() +
+  labs(title = "Number of Products by Brand", x = "Brand", y = "Count")
+
+# 6. Breakdown of Products by Size
+data %>%
+  count(size) %>%
+  ggplot(aes(x = reorder(as.factor(size), n), y = n)) +
+  geom_bar(stat = "identity", fill = "pink", color = "black") +
+  labs(title = "Number of Products by Size", x = "Size", y = "Count") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# 7. Relationship Between Price and Another Variable (Size)
+ggplot(data, aes(x = as.factor(size), y = price)) +
+  geom_boxplot(fill = "cyan", color = "black") +
+  labs(title = "Boxplot of Prices by Size", x = "Size", y = "Price") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
